@@ -8,7 +8,9 @@ class User(models.Model):
 
     crowd_count = models.IntegerField(default=None)
 
-    time = models.DateTimeField(auto_now_add=True)
+    time = models.DateTimeField()
+
+    alert = models.CharField(max_length=255)
 
     def __str__(self):
         return self.image.url
