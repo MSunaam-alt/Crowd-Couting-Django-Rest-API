@@ -1,15 +1,14 @@
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view, parser_classes
 from rest_framework.response import Response
 from rest_framework import status
 from .models import User
 from .serializer import UserSerializer
 from django.core.files.storage import FileSystemStorage, default_storage
-# Ensure this path is correct
 from api.ml_model.Cr_Couting import counting
 from datetime import datetime, timedelta
 from drf_yasg.utils import swagger_auto_schema
 from drf_yasg import openapi
-
+from rest_framework.parsers import MultiPartParser
 
 @swagger_auto_schema(
     method='get',
@@ -22,7 +21,7 @@ from drf_yasg import openapi
         openapi.Parameter('image', openapi.IN_FORM, description="Image file", type=openapi.TYPE_FILE, required=True),
         openapi.Parameter('time', openapi.IN_FORM, description="Time in ISO format", type=openapi.TYPE_STRING, required=True),
     ],
-    responses={201: openapi.Response("Image uploaded")},
+    responses={201: openapi.Response("Image uploaded successfully")},
     operation_description="Upload an image and get crowd count analysis."
 )
 @swagger_auto_schema(
@@ -31,6 +30,7 @@ from drf_yasg import openapi
     operation_description="Delete all user records."
 )
 @api_view(["GET", "POST", "DELETE"])
+@parser_classes([MultiPartParser])
 def get_crowd(request):
     if request.method == "GET":
         users = User.objects.all()
