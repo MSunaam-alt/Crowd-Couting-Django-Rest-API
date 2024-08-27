@@ -82,7 +82,7 @@ def counting(img_path):
     # img_path = "test1.jpg"
 
     img = transform(Image.open(img_path).convert('RGB'))
-    output = model(img.unsqueeze(0).to("cuda"))
+    output = model(img.unsqueeze(0).to(device))
     Predicted_Count = int(output.detach().cpu().sum().numpy())
 
     return Predicted_Count
