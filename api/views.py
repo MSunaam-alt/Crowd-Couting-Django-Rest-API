@@ -7,8 +7,29 @@ from django.core.files.storage import FileSystemStorage, default_storage
 # Ensure this path is correct
 from api.ml_model.Cr_Couting import counting
 from datetime import datetime, timedelta
+from drf_yasg.utils import swagger_auto_schema
+from drf_yasg import openapi
 
 
+@swagger_auto_schema(
+    method='get',
+    responses={200: UserSerializer(many=True)},
+    operation_description="Retrieve all user records."
+)
+@swagger_auto_schema(
+    method='post',
+    manual_parameters=[
+        openapi.Parameter('image', openapi.IN_FORM, description="Image file", type=openapi.TYPE_FILE, required=True),
+        openapi.Parameter('time', openapi.IN_FORM, description="Time in ISO format", type=openapi.TYPE_STRING, required=True),
+    ],
+    responses={201: openapi.Response("Image uploaded")},
+    operation_description="Upload an image and get crowd count analysis."
+)
+@swagger_auto_schema(
+    method='delete',
+    responses={200: openapi.Response("All records deleted")},
+    operation_description="Delete all user records."
+)
 @api_view(["GET", "POST", "DELETE"])
 def get_crowd(request):
     if request.method == "GET":
