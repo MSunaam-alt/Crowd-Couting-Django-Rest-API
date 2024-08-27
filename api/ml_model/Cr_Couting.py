@@ -69,7 +69,9 @@ def counting(img_path):
                                                     std=[0.229, 0.224, 0.225]),
     ])
 
-    model = CSRNet().to("cuda")
+    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+
+    model = CSRNet().to(device)
     # base_path = os.path.dirname(os.path.abspath(__file__))
     # print(base_path)
     checkpoint = torch.load(
